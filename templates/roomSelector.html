@@ -52,13 +52,14 @@ body {
   color: #999;
 }
 
+
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<h2>{{room}} - DjChat</h2>
+<h2>{{username}} - RoomList</h2>
 
 <div id="display">
 
@@ -75,13 +76,13 @@ $(document).ready(function(){
 setInterval(function(){
     $.ajax({
         type: 'GET',
-        url : "/getRooms/{{user}}/",
+        url : "/getUserRooms/{{username}}/",
         success: function(response){
             console.log(response);
             $("#display").empty();
-            for (var key in response.messages)
+            for (var key in response.rooms)
             {
-                var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
+                var temp="<div class='container darker'><b>"+response.rooms[key].room+"</b></div>";
                 $("#display").append(temp);
             }
         },
@@ -91,6 +92,7 @@ setInterval(function(){
     });
 },1000);
 })
+
 
 </script>
 
@@ -128,12 +130,12 @@ setInterval(function(){
     padding: 20px;
     }
 
+
     </style>
 
     <form id="post-form">
         {% csrf_token %}
         <input type="hidden" name="username" id="username" value="{{username}}"/>
-        <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
         <input type="text" name="message" id="message" width="100px"/>
         <input type="submit" value="Send">
     </form>
@@ -161,6 +163,7 @@ setInterval(function(){
     });
     document.getElementById('message').value = ''
   });
+
 
 </script>
 

@@ -10,3 +10,7 @@ class Message(models.Model):
     user = models.CharField(max_length=256)
     date = models.DateTimeField(default=datetime.now)
     room = models.CharField(max_length=256)
+
+class ChatRoomParticipant(models.Model):
+    user = models.CharField(max_length=256)
+    room = models.CharField(max_length=256)
