@@ -8,8 +8,6 @@ from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
 def login(request):
-    new_message = ChatRoomParticipant.objects.create(user="Andrei12", room="Room123")
-    new_message.save()
     return render(request, 'login.html')
 
 def roomList(request, user):
@@ -17,8 +15,7 @@ def roomList(request, user):
         'username': user,
     })
 
-def room(request, room):
-    username = request.GET.get('username')
+def room(request, room, username):
     room_details = Room.objects.get(name=room)
     return render(request, 'room.html', {
         'username': username,
@@ -33,11 +30,21 @@ def checkCredentials(request):
     user= authenticate (username=username, password = password)
 
     if user is not None:
-        return  redirect('roomsList/')
+        return  redirect('/roomList/'+username)
+
+def checkRoom(request):
+    room = request.POST['roomName']
+    username = request.POST['username']
+
+    if Room.objects.filter(name=room).exists():
+        return redirect('/room'+room+'/?username='+username)
+    else:
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+        return redirect('/room/?room='+room+'/?username='+username)
 
 def getUserRooms(request, user):
     user_details = User.objects.get(username=user)
-
     rooms = ChatRoomParticipant.objects.filter(user=user_details.username)
     return JsonResponse({"rooms":list(rooms.values())})
 
