@@ -60,6 +60,6 @@ def send(request):
 def getMessages(request, room):
     room_details = Room.objects.get(roomName=room)
 
-    messages = Message.objects
+    messages = Message.objects.filter(room=room)
     return JsonResponse({"messages":list(messages.values())})
 
