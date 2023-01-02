@@ -41,6 +41,8 @@ def checkRoom(request):
     else:
         new_room = Room.objects.create(roomName=roomName)
         new_room.save()
+        #new_link = ChatRoomParticipant.objects.create(room=roomName,user=username)
+        #new_link.save()
         return redirect('/room/' + roomName + '/' + username)
 
 def getUserRooms(request, user):
@@ -59,7 +61,6 @@ def send(request):
 
 def getMessages(request, room):
     room_details = Room.objects.get(roomName=room)
-
-    messages = Message.objects.filter(room=room)
+    messages = Message.objects.filter(room=room_details.id)
     return JsonResponse({"messages":list(messages.values())})
 
